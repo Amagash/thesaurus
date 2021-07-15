@@ -21,15 +21,31 @@ def translate(word):
     else:
         return "The word was not found"
 
+def connection_to_db():
+    mydb = mysql.connector.connect(
+        host = "108.167.140.122",
+        user = "ardit700_student",
+        passwd = "ardit700_student",
+        database = "ardit700_pm1database"
+    )
+
+    return mydb
+
+    
+def get_result(word, cursor):
+    cursor.execute("SELECT * FROM Dictionary WHERE Expression = '%s' " % word)
+    result = cursor.fetchall()
+    return result
 
 
 if __name__ == "__main__":
     word = input("input word: ")
-    con = mysql.connector.connect(user='ardit700_student', password='ardit700_student', host='108.167.140.122', database='ardit700_pm1database')
-    cursor = con.cursor()
-    query = cursor.execute("SELECT * FROM Dictionary WHERE Expression = '%s' " % word)
-    results = cursor.fetchall()
+    mydb = connection_to_db()
+    cursor = mydb.cursor()
+    results = get_result(word, cursor)
     print(results)
+
+    # get_result(word)
     
     
     # print(word)
