@@ -21,6 +21,7 @@ def translate(word):
     else:
         return "The word was not found"
 
+
 def connection_to_db():
     mydb = mysql.connector.connect(
         host = "108.167.140.122",
@@ -33,9 +34,19 @@ def connection_to_db():
 
     
 def get_result(word, cursor):
+    word = word.lower()
     cursor.execute("SELECT * FROM Dictionary WHERE Expression = '%s' " % word)
     result = cursor.fetchall()
     return result
+
+
+def push_definition(results):
+    word = results[0][0]
+    if results:
+        for result in results:
+            print("A definition of {} is: {}\n".format(result[0], result[1]))
+    else:
+        return "The word was not found"
 
 
 if __name__ == "__main__":
@@ -44,7 +55,7 @@ if __name__ == "__main__":
     cursor = mydb.cursor()
     results = get_result(word, cursor)
     print(results)
-
+    print (push_definition(results))
     # get_result(word)
     
     
